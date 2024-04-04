@@ -71,7 +71,7 @@ public class JFrameCompBase extends JComponent{
         render((Graphics2D)g);
                  
             
-        g3.drawImage(PostProcessing.blur(bufferImage), 0, 0, null);
+        g3.drawImage(bufferImage, 0, 0, null);
         g3.dispose(); 
    }
 
