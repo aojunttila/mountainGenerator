@@ -69,7 +69,7 @@ public class JFrameBase extends JFrame{
           }
         }
       };
-      executor.scheduleAtFixedRate(task,0,1000/60,TimeUnit.MILLISECONDS);//*/
+      executor.scheduleAtFixedRate(task,0,1000/1000,TimeUnit.MILLISECONDS);//*/
 
       ///*
     panel.addMouseWheelListener(new MouseWheelListener() {

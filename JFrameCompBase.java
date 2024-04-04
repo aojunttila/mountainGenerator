@@ -59,7 +59,7 @@ public class JFrameCompBase extends JComponent{
         for(int i=0;i<elementList.length;i++){
             if(elementList[i]!=null){panel.add(elementList[i]);}}
         
-        processHandler=new MainProcess(5,5);
+        processHandler=new MainProcess(4,4);
        
         
     }

@@ -9,8 +9,8 @@ public class JFrameImage extends JComponent
   private float xpos;
   private float ypos;
   public int ogX,ogY;  
-  private int xScale;
-  private int yScale;
+  int xScale;
+  int yScale;
   Ellipse2D.Double ring2;
   BufferedImage image;
   String filepath;
