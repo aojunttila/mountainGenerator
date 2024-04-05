@@ -35,14 +35,14 @@ public class MainProcess{
     }
 
     int limiter=6;
-    boolean stopAtUpscale=true;
-    float divisor=6;
+    boolean stopAtUpscale=false;
+    float divisor=7;
     public void nextFrame(){
         updateDims();
         framecount++;framecount2++;
-        if(framecount2<1000){return;}
+        if(framecount2<0){return;}
         if(pixelCount<(int)(w*h)/divisor&&(upscaleCount<limiter||!stopAtUpscale)){
-            if(fancyMode){copyToDisplayList();}
+            if(fancyMode){copyToDisplayList(false);}
             recursivePixelSpawn();
             recursiveMove(0);
             if(!(pixelCount<(int)(w*h)/divisor)){framecount2=0;}
@@ -51,7 +51,7 @@ public class MainProcess{
                 upscale();
                 //mutateLines();
                 recalculatePixelCount();
-                copyToDisplayList();
+                if(fancyMode){copyToDisplayList(true);}
             }else{return;}
         }
         try{
@@ -74,7 +74,12 @@ public class MainProcess{
     public void copyToDisplayList(boolean absolute){
         for(int x=0;x<w;x++){
             for(int y=0;y<h;y++){
-                if(absolute)displayList[x][y]=mainList[x][y]?255:0;
+                if(absolute){displayList[x][y]=mainList[x][y]?254:0;}
+                else{
+                    if(displayList[x][y]==0||displayList[x][y]==255){
+                        displayList[x][y]=mainList[x][y]?254:0;
+                    }else{if(rand.nextInt(10)==0){displayList[x][y]-=1;}}
+                }
             }
         }
     }
@@ -177,7 +182,7 @@ public class MainProcess{
         if (checkIfTouching()) {
             pixelCount += 1;
         } else {
-            if(fancyMode){displayList[fX][fY]=rand.nextInt(100);}
+            if(fancyMode){displayList[fX][fY]=100;}
             recursiveMove(recursionDepth + 1);
         }
     }

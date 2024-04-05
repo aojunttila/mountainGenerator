@@ -7,7 +7,7 @@ import java.util.Random;
 
 
 public class JFrameCompBase extends JComponent{
-    boolean fancyMode=true;
+    boolean fancyMode=false;
 
     JPanel panel;BlurredImage bl;
     int sidething=0;
@@ -90,6 +90,7 @@ public class JFrameCompBase extends JComponent{
     //testEmitter2.draw(bufferG);
     //Toolkit.getDefaultToolkit().sync();
     processHandler.draw(bufferG);
+    if(bl!=null){bl.draw(bufferG);}
     for(int i=0;i<elementList.length;i++){
         if(elementList[i]!=null){
             elementList[i].draw(bufferG);
@@ -106,7 +107,8 @@ public class JFrameCompBase extends JComponent{
 
     public void nextFrame(int mouseX,int mouseY,boolean mouseDown){
     processHandler.nextFrame();
-    //if(bl)
+    if(bl==null){bl=new BlurredImage(processHandler.mainList,1000,500);}
+    else{bl.updateList(processHandler.mainList);bl.updateImage();}
     //int x;int y;
     //testpoly.setPoint(2,mouseX,mouseY);
     for(int i=0;i<elementList.length;i++){
