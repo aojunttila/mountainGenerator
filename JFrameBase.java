@@ -52,10 +52,38 @@ public class JFrameBase extends JFrame{
 
       fullDraw();
       //run();
+
+
+      panel.addMouseWheelListener(new MouseWheelListener() {
+        public void mouseWheelMoved(MouseWheelEvent e) {
+          System.out.println(e.getWheelRotation());
+          if(e.getWheelRotation()==1){scrollAmount+=e.getWheelRotation();}
+          else if(s>s1){scrollAmount+=e.getWheelRotation();}
+          System.out.println(s1+scrollAmount/4);
+          s=s1+scrollAmount/4;
+  
+        }
+      });
+
+      panel.addMouseListener(new MouseAdapter(){
+        public void mousePressed(MouseEvent e){mouseDown=true;panel.requestFocusInWindow();}
+        public void mouseReleased(MouseEvent e){mouseDown=false;}});
+        panel.addMouseMotionListener(new MouseAdapter(){
+        public void mouseMoved(MouseEvent e){mouseX=e.getX();mouseY=e.getY();}
+        public void mouseDragged(MouseEvent e){mouseX=e.getX();mouseY=e.getY();}});
+        panel.addKeyListener(new KeyListener(){
+        public void keyTyped(KeyEvent e){}
+        public void keyPressed(KeyEvent e){
+          //System.out.println(e.getKeyCode());
+        }
+        public void keyReleased(KeyEvent e){
+          //System.out.println(e.getKeyCode());
+        }
+        });
       ///*
       ScheduledExecutorService executor=Executors.newScheduledThreadPool(1);
       Runnable task=()->{
-
+      //while (true) {
         if(framecount>1){ut.startTimer();}
         comp.nextFrame(mouseX,mouseY,mouseDown);comp.repaint();
         if(framecount>1){frametimes.add(ut.stopTimer(false));}
@@ -68,35 +96,13 @@ public class JFrameBase extends JFrame{
             System.out.println(Util.colorText("Average frame time: "+(frametotal/framecount)+" ms",1,150,1));
           }
         }
+        //}
       };
-      executor.scheduleAtFixedRate(task,0,1000/1000,TimeUnit.MILLISECONDS);//*/
+      executor.scheduleAtFixedRate(task,0,1,TimeUnit.MILLISECONDS);//*/
 
       ///*
-    panel.addMouseWheelListener(new MouseWheelListener() {
-      public void mouseWheelMoved(MouseWheelEvent e) {
-        System.out.println(e.getWheelRotation());
-        if(e.getWheelRotation()==1){scrollAmount+=e.getWheelRotation();}
-        else if(s>s1){scrollAmount+=e.getWheelRotation();}
-        System.out.println(s1+scrollAmount/4);
-        s=s1+scrollAmount/4;
 
-      }
-    });
-    panel.addMouseListener(new MouseAdapter(){
-      public void mousePressed(MouseEvent e){mouseDown=true;panel.requestFocusInWindow();}
-      public void mouseReleased(MouseEvent e){mouseDown=false;}});
-      panel.addMouseMotionListener(new MouseAdapter(){
-      public void mouseMoved(MouseEvent e){mouseX=e.getX();mouseY=e.getY();}
-      public void mouseDragged(MouseEvent e){mouseX=e.getX();mouseY=e.getY();}});
-      panel.addKeyListener(new KeyListener(){
-      public void keyTyped(KeyEvent e){}
-      public void keyPressed(KeyEvent e){
-        //System.out.println(e.getKeyCode());
-      }
-      public void keyReleased(KeyEvent e){
-        //System.out.println(e.getKeyCode());
-      }
-      });
+
       //*/
     }
 

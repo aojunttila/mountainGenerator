@@ -7,7 +7,9 @@ import java.util.Random;
 
 
 public class JFrameCompBase extends JComponent{
-    JPanel panel;
+    boolean fancyMode=true;
+
+    JPanel panel;BlurredImage bl;
     int sidething=0;
     JFrameImage img;
     Graphics2D g2;
@@ -17,7 +19,7 @@ public class JFrameCompBase extends JComponent{
     int width;MainProcess processHandler;
     boolean imageOver;
     JFramePolygon testpoly,boardOutline;
-    int height;int h2;int scaleCount=7;
+    int height;int h2;int scaleCount=3;
     JFrameImage display;
     Random rand=new Random();
     JFrameImage[]elementList=new JFrameImage[2000];
@@ -59,7 +61,8 @@ public class JFrameCompBase extends JComponent{
         for(int i=0;i<elementList.length;i++){
             if(elementList[i]!=null){panel.add(elementList[i]);}}
         
-        processHandler=new MainProcess(4,4);
+        processHandler=new MainProcess(5,5,fancyMode);
+        
        
         
     }
@@ -103,6 +106,7 @@ public class JFrameCompBase extends JComponent{
 
     public void nextFrame(int mouseX,int mouseY,boolean mouseDown){
     processHandler.nextFrame();
+    //if(bl)
     //int x;int y;
     //testpoly.setPoint(2,mouseX,mouseY);
     for(int i=0;i<elementList.length;i++){
