@@ -81,7 +81,7 @@ public class BlurredImage{
                 if(mainList[x][y]){
                     int hi=-1;
                     hi=orderList[x][y];
-                    displayImage.setRGB(x,y,new Color(weightList[x][y]==1?0:255,255,255).getRGB());
+                    displayImage.setRGB(x,y,new Color(weightList[x][y]==1?0:255,weightList[x][y]==1?100:255,255).getRGB());
                 }else{
                     displayImage.setRGB(x,y,new Color(0,0,0).getRGB());
                 }

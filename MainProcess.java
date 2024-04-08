@@ -35,9 +35,9 @@ public class MainProcess{
         
     }
 
-    int limiter=6;
+    int limiter=4;
     boolean stopAtUpscale=false;
-    float divisor=7;
+    float divisor=5;
     public void nextFrame(){
         updateDims();
         framecount++;framecount2++;
