@@ -46,6 +46,22 @@ public class BlurredImage{
     public void computeWeightList(){
         weightList=new int[mainList.length][mainList[0].length];
         populateOnes();
+        advanceWeights();
+    }
+
+    public void advanceWeights(){
+        int maxWeight=0;int[][]weightList2=weightList;
+        for(int x=0;x<mainList.length;x++){
+            for(int y=0;y<mainList[0].length;y++){
+                if(mainList[x][y]&&weightList2[x][y]==0){
+                    try{maxWeight=weightList2[x+1][y]>maxWeight?weightList2[x+1][y]:maxWeight;}catch(Exception e){}
+                    try{maxWeight=weightList2[x-1][y]>maxWeight?weightList2[x-1][y]:maxWeight;}catch(Exception e){}
+                    try{maxWeight=weightList2[x][y+1]>maxWeight?weightList2[x][y+1]:maxWeight;}catch(Exception e){}
+                    try{maxWeight=weightList2[x][y-1]>maxWeight?weightList2[x][y-1]:maxWeight;}catch(Exception e){}
+                    if(maxWeight>0){weightList[x][y]=maxWeight+1;}//weightList[x][y]=maxWeight+1;
+                }
+            }
+        }
     }
 
     public void populateOnes(){
@@ -81,7 +97,7 @@ public class BlurredImage{
                 if(mainList[x][y]){
                     int hi=-1;
                     hi=orderList[x][y];
-                    displayImage.setRGB(x,y,new Color(weightList[x][y]==1?0:255,weightList[x][y]==1?100:255,255).getRGB());
+                    displayImage.setRGB(x,y,new Color(weightList[x][y]>0?weightList[x][y]*20:0,255,255).getRGB());
                 }else{
                     displayImage.setRGB(x,y,new Color(0,0,0).getRGB());
                 }
