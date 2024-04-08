@@ -107,8 +107,8 @@ public class JFrameCompBase extends JComponent{
 
     public void nextFrame(int mouseX,int mouseY,boolean mouseDown){
     processHandler.nextFrame();
-    if(bl==null){bl=new BlurredImage(processHandler.mainList,1000,500);}
-    else{bl.updateList(processHandler.mainList);bl.updateImage();}
+    if(bl==null){bl=new BlurredImage(processHandler.mainList,processHandler.orderList,processHandler.stickGraph,700,50);}
+    else{bl.updateList(processHandler.mainList,processHandler.orderList,processHandler.stickGraph,processHandler.pixelCount);bl.updateImage();}
     //int x;int y;
     //testpoly.setPoint(2,mouseX,mouseY);
     for(int i=0;i<elementList.length;i++){

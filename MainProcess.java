@@ -13,6 +13,7 @@ public class MainProcess{
     JFrameImage display;int tempFrameCount;
     JFramePolygon boardOutline;
     int displayList[][];
+    int orderList[][];int currentOrder=0;
     int scaleCount=2;int fX;int fY;
     int sizeMultiplier=8;boolean[][][]stickGraph;
     int startX;int startY;int upscaleCount=0;
@@ -40,7 +41,7 @@ public class MainProcess{
     public void nextFrame(){
         updateDims();
         framecount++;framecount2++;
-        if(framecount2<0){return;}
+        if(framecount2<1000){return;}
         if(pixelCount<(int)(w*h)/divisor&&(upscaleCount<limiter||!stopAtUpscale)){
             if(fancyMode){copyToDisplayList(false);}
             recursivePixelSpawn();
@@ -116,36 +117,36 @@ public class MainProcess{
         updateDims();
         mainList=createList(w*2,h*2);
         boolean[][][]stickGraph2=new boolean[w*2][h*2][4];
-
-        //updateDims();
-        //w=w*2;h=h*2;
+        currentOrder=0;
         for(int x=0;x<w;x++){
             for(int y=0;y<h;y++){
                 if(tempList[x][y]){
-                    try{if(tempList[x][y]){
-                        mainList[x*2][y*2]=true;
-                    }}catch(Exception e){}
-                    try{if(stickGraph[x][y][1]){
+                    try{if(tempList[x][y]){mainList[x*2][y*2]=true;orderList[x*2][y*2]=0;
+                    }}catch(Exception e){}try{if(stickGraph[x][y][1]){
                         mainList[x*2+1][y*2]=true;
                         stickGraph2[x*2][y*2][1]=true;
                         stickGraph2[x*2+1][y*2][1]=true;
-                    }}catch(Exception e){}
-                    try{if(stickGraph[x][y][3]){
+                        //stickGraph2[x*2+1][y*2][3]=true;
+                        orderList[x*2+1][y*2]=0;
+                    }}catch(Exception e){}try{if(stickGraph[x][y][3]){
                         mainList[x*2][y*2+1]=true;
                         stickGraph2[x*2][y*2][3]=true;
                         stickGraph2[x*2][y*2+1][3]=true;
-                    }}catch(Exception e){}
-                    try{if(stickGraph[x][y][2]){
+                        //stickGraph2[x*2][y*2+1][1]=true;
+                        orderList[x*2][y*2+1]=0;
+                    }}catch(Exception e){}try{if(stickGraph[x][y][2]){
                         mainList[x*2][y*2-1]=true;
                         stickGraph2[x*2][y*2][2]=true;
                         stickGraph2[x*2][y*2-1][2]=true;
-                    }}catch(Exception e){}
-                    try{if(stickGraph[x][y][0]){
+                        //stickGraph2[x*2][y*2-1][0]=true;
+                        orderList[x*2][y*2-1]=0;
+                    }}catch(Exception e){}try{if(stickGraph[x][y][0]){
                         mainList[x*2-1][y*2]=true;
                         stickGraph2[x*2][y*2][0]=true;
                         stickGraph2[x*2-1][y*2][0]=true;
+                        //stickGraph2[x*2-1][y*2][2]=true;
+                        orderList[x*2-1][y*2]=0;
                     }}catch(Exception e){}
-
                 }else{}
             }
         }
@@ -156,32 +157,27 @@ public class MainProcess{
         displayImage=new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
     }
 
-    public static final int MAX_RECURSION_DEPTH = 2000;
+    int maxdepth = 2000;
 
     public void recursiveMove(int recursionDepth) {
-        if (recursionDepth >= MAX_RECURSION_DEPTH) {
+        if (recursionDepth >= maxdepth) {
             mainList[fX][fY]=false;
-            return;
-        }
-        
+            return;}
         int tempMove = rand.nextInt(4);
-        
-        int tfX = fX;
-        int tfY = fY;
-    
-        try {
+        int tfX=fX;int tfY=fY;
+        try{
             mainList[fX][fY] = false;
             fY += tempMove == 0 ? -1 : tempMove == 1 ? 1 : 0;
             fX += tempMove == 2 ? -1 : tempMove == 3 ? 1 : 0;
             mainList[fX][fY] = true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            fX = tfX;
-            fY = tfY;
-        }
-    
-        if (checkIfTouching()) {
-            pixelCount += 1;
-        } else {
+        }catch(ArrayIndexOutOfBoundsException e) {
+            fX=tfX;
+            fY=tfY;}
+        if(checkIfTouching()){
+            pixelCount+=1;
+            orderList[fX][fY]=currentOrder;
+            currentOrder+=1;
+        }else{
             if(fancyMode){displayList[fX][fY]=100;}
             recursiveMove(recursionDepth + 1);
         }
@@ -217,31 +213,6 @@ public class MainProcess{
     }
     
     
-    /*
-    public void recursiveMove(){
-        int tempMove=rand.nextInt(4);
-        //up down left right
-        try{
-        mainList[fX][fY]=false;}catch(Exception e){}
-        int tfX=0;int tfY=0;
-        try{
-        tfX=fX;tfY=fY;
-        fY+=tempMove==0?-1:tempMove==1?1:0;
-        fX+=tempMove==2?-1:tempMove==3?1:0;}catch(Exception e){}
-        try{mainList[fX][fY]=true;}
-        catch(Exception e){fX=tfX;fY=tfY;mainList[fX][fY]=true;}
-        if(checkIfTouching()){pixelCount+=1;}
-        else{recursiveMove();}
-    }
-
-    public boolean checkIfTouching(){
-        int temp=0;
-        try{if(mainList[fX+1][fY]){return true;}}catch(Exception e){}
-        try{if(mainList[fX-1][fY]){return true;}}catch(Exception e){}
-        try{if(mainList[fX][fY+1]){return true;}}catch(Exception e){}
-        try{if(mainList[fX][fY-1]){return true;}}catch(Exception e){}
-        return false;
-    }*/
 
     public void draw(Graphics2D g2d){
         boardOutline.draw(g2d);
@@ -250,6 +221,7 @@ public class MainProcess{
 
     public boolean[][]createList(int x,int y){
         boolean[][]temp=new boolean[x][y];
+        orderList=new int[x][y];
         if(fancyMode){displayList=new int[x][y];}
         return temp;
     }
