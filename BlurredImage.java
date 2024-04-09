@@ -43,25 +43,35 @@ public class BlurredImage{
         displayImage=new BufferedImage(list.length,list[0].length,BufferedImage.TYPE_INT_RGB);
     }
 
+    int weightcap=20;
+    int iterationLimit=20;
     public void computeWeightList(){
         weightList=new int[mainList.length][mainList[0].length];
         populateOnes();
-        advanceWeights();
+        advanceWeights(0);
     }
 
-    public void advanceWeights(){
-        int maxWeight=0;int[][]weightList2=weightList;
+    public void advanceWeights(int iteration){
+        if(iteration>iterationLimit){return;}
+        int maxWeight=0;int[][]weightList2=new int[mainList.length][mainList[0].length];
+        //weightList2=weightList.clone();
+        int maxmaxWeight=0;
         for(int x=0;x<mainList.length;x++){
             for(int y=0;y<mainList[0].length;y++){
-                if(mainList[x][y]&&weightList2[x][y]==0){
+                weightList2[x][y]=weightList[x][y];}}
+        for(int x=0;x<mainList.length;x++){
+            for(int y=0;y<mainList[0].length;y++){
+                maxWeight=0;
+                if(mainList[x][y]&&!(weightList2[x][y]>0)){
                     try{maxWeight=weightList2[x+1][y]>maxWeight?weightList2[x+1][y]:maxWeight;}catch(Exception e){}
                     try{maxWeight=weightList2[x-1][y]>maxWeight?weightList2[x-1][y]:maxWeight;}catch(Exception e){}
                     try{maxWeight=weightList2[x][y+1]>maxWeight?weightList2[x][y+1]:maxWeight;}catch(Exception e){}
                     try{maxWeight=weightList2[x][y-1]>maxWeight?weightList2[x][y-1]:maxWeight;}catch(Exception e){}
-                    if(maxWeight>0){weightList[x][y]=maxWeight+1;}//weightList[x][y]=maxWeight+1;
+                    if(maxWeight>0){weightList[x][y]=maxWeight+1;if(maxWeight>maxmaxWeight){maxmaxWeight=maxWeight;}}
                 }
             }
         }
+        if(maxmaxWeight<weightcap){advanceWeights(iteration+1);}
     }
 
     public void populateOnes(){
@@ -76,7 +86,7 @@ public class BlurredImage{
                     if(stickGraph[x][y][3]){temp++;}
                     if(temp==0){
                         weightList[x][y]=1;
-                    }
+                    }else{weightList[x][y]=0;}
                 }
             }
         }
@@ -97,7 +107,9 @@ public class BlurredImage{
                 if(mainList[x][y]){
                     int hi=-1;
                     hi=orderList[x][y];
-                    displayImage.setRGB(x,y,new Color(weightList[x][y]>0?weightList[x][y]*20:0,255,255).getRGB());
+                    int brightness=weightList[x][y]>0?weightList[x][y]*20:0;
+                    brightness=brightness>255?255:brightness;
+                    displayImage.setRGB(x,y,new Color(brightness,brightness,brightness).getRGB());
                 }else{
                     displayImage.setRGB(x,y,new Color(0,0,0).getRGB());
                 }

@@ -35,7 +35,7 @@ public class MainProcess{
         
     }
 
-    int limiter=4;
+    int limiter=3;
     boolean stopAtUpscale=false;
     float divisor=3;
     public void nextFrame(){
