@@ -188,24 +188,28 @@ public class MainProcess{
         try {
             if (fX < mainList.length - 1 && mainList[fX + 1][fY]) {
                 stickGraph[fX+1][fY][0]=true;
+                //stickGraph[fX][fY][1]=true;
                 return true;
             }
         } catch (ArrayIndexOutOfBoundsException e) {}
         try {
             if (fX > 0 && mainList[fX - 1][fY]) {
                 stickGraph[fX-1][fY][1]=true;
+                //stickGraph[fX][fY][0]=true;
                 return true;
             }
         } catch (ArrayIndexOutOfBoundsException e) {}
         try {
             if (fY < mainList[0].length - 1 && mainList[fX][fY + 1]) {
                 stickGraph[fX][fY+1][2]=true;
+                //stickGraph[fX][fY][3]=true;
                 return true;
             }
         } catch (ArrayIndexOutOfBoundsException e) {}
         try {
             if (fY > 0 && mainList[fX][fY - 1]) {
                 stickGraph[fX][fY-1][3]=true;
+                //stickGraph[fX][fY][2]=true;
                 return true;
             }
         } catch (ArrayIndexOutOfBoundsException e) {}
